@@ -1,0 +1,472 @@
+/* ===== RESET ===== */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: #f9fafb;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    backdrop-filter: blur(10px);
+    background: rgba(22, 163, 74, 0.85) !important; /* verde elegante */
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.navbar a {
+    color: white !important;
+    font-weight: 500;
+}
+
+.navbar a:hover {
+    opacity: 0.8;
+}
+
+/* ===== HERO ===== */
+.hero {
+    padding: 150px 20px 140px;
+    text-align: center;
+    background: linear-gradient(
+    rgba(0,0,0,0.4),
+    rgba(0,0,0,0.5)
+),
+url('../img/Fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+    border-radius: 0;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+/* ===== SECCIONES ===== */
+.section {
+    padding: 60px 20px;
+}
+
+.section-title {
+    color: #14532d;
+    text-align: center;
+    font-weight: 700;
+}
+
+.section-title::after {
+    content: "";
+    width: 60px;
+    height: 4px;
+    background: #22c55e;
+    display: block;
+    margin: 10px auto;
+    border-radius: 10px;
+}
+
+/* ===== CARRUSEL ===== */
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-categories {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 5px;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+.carousel-categories::-webkit-scrollbar {
+    display: none;
+}
+
+/* ===== CARDS CATEGORÍAS (MEJORADAS) ===== */
+.cat-card {
+    min-width: 190px; /* 🔥 más ancho */
+    height: 170px; /* 🔥 más alto */
+
+    background: white;
+    border-radius: 20px;
+
+    text-align: center;
+    padding: 20px 12px;
+
+    text-decoration: none;
+    color: #111;
+
+    border: 1px solid #eee;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+
+    transition: all 0.25s ease;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cat-card {
+    backdrop-filter: blur(5px);
+}
+
+.cat-card img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    margin: 0 auto 10px;
+}
+
+.cat-card span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* HOVER */
+.cat-card:hover {
+    transform: translateY(-6px);
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: white;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+/* BOTONES */
+.carousel-btn {
+    position: absolute;
+    z-index: 5;
+    background: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.carousel-btn.left { left: -10px; }
+.carousel-btn.right { right: -10px; }
+
+.carousel-btn:hover {
+    background: #16a34a;
+    color: white;
+}
+
+/* ===== PRODUCTOS ===== */
+.grid-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #eee;
+    transition: 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+    height: 130px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.product-card h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111; /* 🔥 esto lo hace visible */
+    margin: 10px 0 5px 0; /* 🔥 separa de la imagen */
+}
+
+.product-card p {
+    color: #16a34a;
+    font-weight: bold;
+}
+
+/* BOTÓN */
+.btn-success {
+    width: 100%;
+    border-radius: 10px;
+    background: #16a34a;
+    border: none;
+}
+
+.btn-success:hover {
+    background: #15803d;
+}
+
+/* ===== SECCIÓN VERDE ===== */
+.section-green {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    padding: 60px 20px;
+    border-radius: 30px;
+    margin: 40px 0;
+    color: white;
+}
+
+.section-green .product-card {
+    background: white;
+}
+
+/* ===== CARRITO ===== */
+#cart-panel {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 320px;
+    height: 100%;
+    background: white;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+    padding: 20px;
+    transition: 0.3s;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+#cart-panel.active {
+    right: 0;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.cart-controls button {
+    background: #22c55e;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: #0f172a;
+    color: white;
+    padding: 60px 20px 30px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    text-align: center;
+}
+
+.footer-col a {
+    display: block;
+    color: #cbd5e1;
+    margin: 5px 0;
+}
+
+.footer-col a:hover {
+    color: #22c55e;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icons a {
+    width: 42px;
+    height: 42px;
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.social-icons a:hover {
+    background: #22c55e;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    color: #94a3b8;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 40px 0 25px 0; /* 🔥 espacio arriba */
+    color: #111;
+}
+
+.carousel-wrapper {
+    margin-top: 30px;
+}
+
+.section {
+    position: relative;
+    z-index: 2;
+    background: #f9fafb;
+    padding-top: 40px;
+}
+
+/* =========================
+   ADMIN PANEL PRO
+========================= */
+
+.admin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+}
+
+.admin-card {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+}
+
+.admin-title {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+.form-control:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22,163,74,0.15);
+}
+
+.btn-admin {
+    width: 100%;
+    padding: 12px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-admin:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+}
+
+.grid-products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 👈 3 columnas fijas */
+    gap: 25px;
+}
+
+/* =========================
+   CHECKOUT PRO
+========================= */
+
+/* =========================
+   CHECKOUT PRO (FIX FINAL)
+========================= */
+
+/* =========================
+   CHECKOUT FIX FINAL REAL
+========================= */
+
+.checkout-wrapper {
+    max-width: 1000px;
+    margin: 60px auto; /* 🔥 centra sin afectar todo */
+    padding: 0 20px;
+}
+
+.checkout-card {
+    width: 100%;
+    background: white;
+    padding: 45px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+}
+
+.checkout-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid #ddd;
+}
+
+.form-control:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22,163,74,0.15);
+}
+
+.btn-checkout {
+    width: 100%;
+    padding: 14px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn-checkout:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+}
