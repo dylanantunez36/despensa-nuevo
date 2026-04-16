@@ -470,3 +470,16 @@ url('../img/Fondo.jpg');
     background: #15803d;
     transform: translateY(-2px);
 }
+
+.sidebar a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 5px;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+}

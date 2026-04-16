@@ -4,7 +4,6 @@
 
 <div class="container">
 
-    <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">Productos</h2>
 
@@ -15,23 +14,16 @@
 
     <a href="/admin" class="btn btn-secondary mb-3">← Volver</a>
 
-    <!-- 🔍 BUSCADOR + FILTRO -->
+    <!-- BUSCADOR + FILTRO -->
     <div class="row mb-4">
 
-        <!-- BUSCAR -->
         <div class="col-md-6">
-            <input 
-                type="text" 
-                id="buscador" 
-                class="form-control" 
-                placeholder="🔍 Buscar producto...">
+            <input type="text" id="buscador" class="form-control" placeholder="🔍 Buscar producto...">
         </div>
 
-        <!-- FILTRO -->
         <div class="col-md-4">
             <select id="filtroCategoria" class="form-control">
                 <option value="">Todas las categorías</option>
-
                 <option value="abarrotes">Abarrotes</option>
                 <option value="higiene">Higiene y Belleza</option>
                 <option value="bebes">Bebés y Niños</option>
@@ -50,10 +42,10 @@
 
     </div>
 
-    <!-- TABLA -->
     <div class="table-responsive">
 
-        <table class="table table-bordered text-center align-middle" id="tablaProductos">
+        <!-- 🔥 TABLA PRO -->
+        <table class="table table-hover shadow-sm align-middle text-center" id="tablaProductos">
 
             <thead class="table-dark">
                 <tr>
@@ -76,7 +68,7 @@
 
                     <td>{{ $p->nombre }}</td>
 
-                    <td style="color:#16a34a; font-weight:bold;">
+                    <td class="fw-bold text-success">
                         L. {{ $p->precio }}
                     </td>
 
@@ -84,9 +76,7 @@
 
                     <td>
 
-                        <a href="/admin/edit/{{ $p->id }}" class="btn btn-warning btn-sm">
-                            Editar
-                        </a>
+                        <a href="/admin/edit/{{ $p->id }}" class="btn btn-warning btn-sm">Editar</a>
 
                         <a href="/admin/delete/{{ $p->id }}" 
                            class="btn btn-danger btn-sm"
@@ -114,38 +104,28 @@
 
 </div>
 
-<!-- 🔥 SCRIPT BUSCADOR + FILTRO -->
 <script>
-
 const buscador = document.getElementById('buscador');
 const filtro = document.getElementById('filtroCategoria');
 const filas = document.querySelectorAll('#tablaProductos tbody tr');
 
 function filtrar() {
-
     let texto = buscador.value.toLowerCase();
     let categoria = filtro.value.toLowerCase();
 
     filas.forEach(fila => {
-
         let nombre = fila.dataset.nombre;
         let cat = fila.dataset.categoria;
 
         let coincideTexto = nombre.includes(texto);
         let coincideCategoria = categoria === "" || cat === categoria;
 
-        if (coincideTexto && coincideCategoria) {
-            fila.style.display = "";
-        } else {
-            fila.style.display = "none";
-        }
-
+        fila.style.display = (coincideTexto && coincideCategoria) ? "" : "none";
     });
 }
 
 buscador.addEventListener('keyup', filtrar);
 filtro.addEventListener('change', filtrar);
-
 </script>
 
 @endsection

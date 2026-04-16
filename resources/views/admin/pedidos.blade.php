@@ -8,13 +8,7 @@
 
     <a href="/admin" class="btn btn-secondary mb-3">← Volver</a>
 
-    @if(session('nuevo_pedido'))
-    <div class="alert alert-success">
-        🛎️ Nuevo pedido recibido
-    </div>
-@endif
-
-    <table class="table table-bordered text-center align-middle">
+    <table class="table table-hover shadow-sm align-middle text-center">
 
         <thead class="table-dark">
             <tr>
@@ -37,9 +31,11 @@
                 <td>{{ $p->nombre }}</td>
                 <td>{{ $p->telefono }}</td>
                 <td>{{ $p->direccion }}</td>
-                <td style="font-weight:bold; color:#16a34a;">
+
+                <td class="fw-bold text-success">
                     L. {{ $p->total }}
                 </td>
+
                 <td>{{ $p->created_at->format('d/m/Y H:i') }}</td>
 
                 <td>

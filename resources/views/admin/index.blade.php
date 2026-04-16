@@ -6,42 +6,66 @@
 
     <!-- HEADER -->
     <div class="mb-4">
-        <h2 class="fw-bold">Dashboard</h2>
+        <h2 class="fw-bold">Dashboard Administrativo</h2>
         <p class="text-muted">Resumen general del sistema</p>
     </div>
 
     <!-- 🔥 CARDS -->
     <div class="row g-4 mb-4">
 
-        <div class="col-md-3">
-            <div class="card shadow border-0 p-3 text-center hover-card">
-                <h6 class="text-muted">📦 Productos</h6>
-                <h2>{{ $totalProductos }}</h2>
+    <!-- PRODUCTOS -->
+    <div class="col-md-3">
+        <div class="card shadow border-0 p-3 hover-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Productos</h6>
+                    <h3 class="fw-bold">{{ $totalProductos }}</h3>
+                </div>
+                <div style="font-size:32px;">📦</div>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="card shadow border-0 p-3 text-center hover-card">
-                <h6 class="text-muted">🧾 Pedidos</h6>
-                <h2>{{ $totalPedidos }}</h2>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow border-0 p-3 text-center hover-card">
-                <h6 class="text-muted">🟡 Pendientes</h6>
-                <h2 style="color:orange;">{{ $pendientes }}</h2>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow border-0 p-3 text-center hover-card">
-                <h6 class="text-muted">🟢 Procesados</h6>
-                <h2 style="color:green;">{{ $procesados }}</h2>
-            </div>
-        </div>
-
     </div>
+
+    <!-- PEDIDOS -->
+    <div class="col-md-3">
+        <div class="card shadow border-0 p-3 hover-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Pedidos</h6>
+                    <h3 class="fw-bold">{{ $totalPedidos }}</h3>
+                </div>
+                <div style="font-size:32px;">🧾</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PENDIENTES -->
+    <div class="col-md-3">
+        <div class="card shadow border-0 p-3 hover-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Pendientes</h6>
+                    <h3 class="fw-bold text-warning">{{ $pendientes }}</h3>
+                </div>
+                <div style="font-size:32px;">🟡</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROCESADOS -->
+    <div class="col-md-3">
+        <div class="card shadow border-0 p-3 hover-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Procesados</h6>
+                    <h3 class="fw-bold text-success">{{ $procesados }}</h3>
+                </div>
+                <div style="font-size:32px;">🟢</div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
     <!-- 📊 GRÁFICA CENTRADA -->
     <div class="row justify-content-center mb-4">

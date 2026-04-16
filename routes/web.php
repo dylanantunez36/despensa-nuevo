@@ -198,3 +198,11 @@ Route::get('/admin/productos', function () {
 
     return view('admin.productos', compact('productos'));
 });
+
+Route::get('/admin/check-pedidos', function () {
+
+    if (!session()->has('admin')) return response()->json([]);
+
+    return \App\Models\Pedido::latest()->take(1)->get();
+
+});
