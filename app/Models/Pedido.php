@@ -12,6 +12,8 @@ class Pedido extends Model
         'telefono',
         'email',
         'detalle',
-        'total'
+        'total',
+        'estado',
+        'tipo_entrega'
     ];
 }

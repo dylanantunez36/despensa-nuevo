@@ -10,10 +10,12 @@
     <!-- HEADER -->
     <div style="text-align:center; border-bottom:2px solid #16a34a; padding-bottom:15px;">
 
+    
+        <h2 style="color:#16a34a; margin:0;">Despensa Espinoza</h2>
+
         <img src="https://i.imgur.com/4SqCNhk.jpeg" style="width:80px; margin-bottom:10px;">
 
-        <h2 style="color:#16a34a; margin:0;">Despensa Espinoza</h2>
-        <p style="margin:0;">Factura de compra</p>
+        <p style="margin:0;">Comprobante de pedido</p>
 
         <p style="margin-top:10px; font-size:14px;">
             Pedido #{{ $pedido_id }}
@@ -42,10 +44,13 @@
         <h3 style="color:#16a34a;">Total: L. {{ $total }}</h3>
     </div>
 
+    <p><strong>Tipo de entrega:</strong> {{ $tipo_entrega == 'domicilio' ? 'A domicilio' : 'Recoger en tienda' }}</p>
+
     <!-- FOOTER -->
-    <div style="margin-top:30px; text-align:center; font-size:12px; color:#777;">
-        Gracias por su compra 🛒
-    </div>
+    <p style="color:#555; font-size:14px;">
+        Su pedido ha sido recibido correctamente y está siendo procesado.
+        Nos comunicaremos con usted cuando esté listo.
+    </p>
 
 </div>
 

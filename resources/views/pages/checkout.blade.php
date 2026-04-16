@@ -11,6 +11,14 @@
         <form onsubmit="event.preventDefault(); confirmarPedido();">
 
             <div class="form-group">
+                <label>Tipo de entrega</label>
+                <select id="tipo_entrega" class="form-control">
+                    <option value="domicilio">Entrega a domicilio</option>
+                    <option value="recoger">Recoger en tienda</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label>Nombre completo</label>
                 <input type="text" id="nombre" class="form-control" required>
             </div>
@@ -69,6 +77,7 @@ function confirmarPedido() {
     let direccion = document.getElementById('direccion').value;
     let telefono = document.getElementById('telefono').value;
     let email = document.getElementById('email').value;
+    let tipo_entrega = document.getElementById('tipo_entrega').value;
 
     if (!nombre || !direccion || !telefono || !email) {
         alert("Completa todos los campos");
@@ -97,7 +106,8 @@ function confirmarPedido() {
             telefono,
             email,
             detalle,
-            total
+            total,
+            tipo_entrega
         })
     })
     .then(res => res.json())

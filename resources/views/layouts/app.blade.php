@@ -206,7 +206,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-@include('components.footer')
+@if(!request()->is('admin*'))
+    @include('components.footer')
+@endif
 
 </body>
 </html>

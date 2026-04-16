@@ -18,7 +18,9 @@ class PedidoController extends Controller
             'telefono' => $data['telefono'],
             'email' => $data['email'],
             'detalle' => $data['detalle'],
-            'total' => $data['total']
+            'total' => $data['total'],
+            'tipo_entrega' => $data['tipo_entrega'],
+            'estado' => 'pendiente'
         ]);
 
         $data['pedido_id'] = $pedido->id;
@@ -38,6 +40,9 @@ class PedidoController extends Controller
                     ->subject('Factura de compra - Despensa Espinoza');
         });
 
-        return response()->json(['success' => true]);
+        session()->flash('nuevo_pedido', true);
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

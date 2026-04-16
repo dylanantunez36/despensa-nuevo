@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PedidoController;
 
@@ -47,14 +48,29 @@ Route::get('/logout', function () {
 ========================= */
 Route::prefix('admin')->group(function () {
 
-    // 🔥 función reutilizable (evita repetir código)
     $checkAdmin = function () {
         if (!session()->has('admin')) return redirect('/login');
     };
 
+    /* 🔥 DASHBOARD */
     Route::get('/', function () use ($checkAdmin) {
+
         if ($res = $checkAdmin()) return $res;
-        return app(ProductoController::class)->index();
+
+        $productos = \App\Models\Producto::all();
+
+        $pendientes = \App\Models\Pedido::where('estado', 'pendiente')->count();
+        $procesados = \App\Models\Pedido::where('estado', 'procesado')->count();
+        $totalPedidos = \App\Models\Pedido::count();
+        $totalProductos = \App\Models\Producto::count();
+
+        return view('admin.index', compact(
+            'productos',
+            'pendientes',
+            'procesados',
+            'totalPedidos',
+            'totalProductos'
+        ));
     });
 
     Route::get('/create', function () use ($checkAdmin) {
@@ -111,6 +127,31 @@ Route::prefix('admin')->group(function () {
         return view('admin.pedidos', compact('pedidos'));
     });
 
+    /* =========================
+       CAMBIAR ESTADO
+    ========================= */
+    Route::post('/pedido/{id}/estado', function ($id) use ($checkAdmin) {
+
+        if ($res = $checkAdmin()) return $res;
+
+        $pedido = \App\Models\Pedido::find($id);
+
+        if ($pedido) {
+            $pedido->estado = 'procesado';
+            $pedido->save();
+
+            Mail::send('emails.pedido_listo', [
+                'nombre' => $pedido->nombre,
+                'tipo_entrega' => $pedido->tipo_entrega
+            ], function ($message) use ($pedido) {
+                $message->to($pedido->email)
+                        ->subject('Pedido listo - Despensa Espinoza');
+            });
+        }
+
+        return back();
+    });
+
 });
 
 /* =========================
@@ -136,4 +177,24 @@ Route::post('/enviar-pedido', [PedidoController::class, 'enviar']);
 Route::get('/ofertas', function () {
     $productos = \App\Models\Producto::where('oferta', true)->get();
     return view('pages.ofertas', compact('productos'));
+});
+
+Route::get('/admin/check-pedidos', function () {
+
+    if (!session()->has('admin')) return response()->json([]);
+
+    $ultimo = \App\Models\Pedido::max('id');
+
+    return response()->json([
+        'ultimo' => $ultimo
+    ]);
+});
+
+Route::get('/admin/productos', function () {
+
+    if (!session()->has('admin')) return redirect('/login');
+
+    $productos = \App\Models\Producto::all();
+
+    return view('admin.productos', compact('productos'));
 });

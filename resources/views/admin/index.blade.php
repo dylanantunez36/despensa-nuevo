@@ -1,113 +1,154 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 
-<div class="container mt-5">
+<div class="container-fluid">
 
     <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="mb-4">
+        <h2 class="fw-bold">Dashboard</h2>
+        <p class="text-muted">Resumen general del sistema</p>
+    </div>
 
-        <div>
-            <h2 class="mb-0">Panel Administrador</h2>
-            <small class="text-muted">Gestión de productos</small>
+    <!-- 🔥 CARDS -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center hover-card">
+                <h6 class="text-muted">📦 Productos</h6>
+                <h2>{{ $totalProductos }}</h2>
+            </div>
         </div>
 
-        <a href="/logout" class="btn btn-danger">
-            Cerrar sesión
-        </a>
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center hover-card">
+                <h6 class="text-muted">🧾 Pedidos</h6>
+                <h2>{{ $totalPedidos }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center hover-card">
+                <h6 class="text-muted">🟡 Pendientes</h6>
+                <h2 style="color:orange;">{{ $pendientes }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center hover-card">
+                <h6 class="text-muted">🟢 Procesados</h6>
+                <h2 style="color:green;">{{ $procesados }}</h2>
+            </div>
+        </div>
 
     </div>
 
-    <!-- INFO -->
-    <div class="mb-3">
-        <p>Total de productos: <strong>{{ count($productos) }}</strong></p>
+    <!-- 📊 GRÁFICA CENTRADA -->
+    <div class="row justify-content-center mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow border-0 p-3 text-center">
+
+                <h6 class="text-muted mb-3">Estado de pedidos</h6>
+
+                <div style="width: 180px; margin:auto;">
+                    <canvas id="graficaPedidos"></canvas>
+                </div>
+
+            </div>
+        </div>
+
     </div>
 
-    <!-- BOTONES SUPERIORES -->
-    <div class="mb-3 d-flex gap-2">
-        <a href="/admin/create" class="btn btn-success">
-            + Agregar Producto
-        </a>
+    <!-- 🔥 ÚLTIMOS PRODUCTOS -->
+    <div class="card shadow border-0 mt-4">
 
-        <a href="/admin/pedidos" class="btn btn-primary">
-            Ver Pedidos
-        </a>
+        <div class="card-header bg-dark text-white">
+            Últimos productos agregados
+        </div>
+
+        <div class="p-3">
+
+            @foreach($productos->take(3) as $p)
+                <div class="d-flex align-items-center mb-3">
+
+                    <img src="{{ asset('img/Productos/' . $p->imagen) }}" 
+                         width="45" 
+                         style="border-radius:8px;">
+
+                    <div class="ms-3">
+                        <strong>{{ $p->nombre }}</strong><br>
+                        <small class="text-muted">L. {{ $p->precio }}</small>
+                    </div>
+
+                </div>
+            @endforeach
+
+        </div>
 
     </div>
 
-    <!-- TABLA -->
-    <div class="table-responsive">
-        <table class="table table-bordered text-center align-middle">
+    <!-- 🔥 ÚLTIMOS PEDIDOS -->
+    <div class="card shadow border-0 mt-4">
 
-            <thead class="table-dark">
-                <tr>
-                    <th>Imagen</th>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Categoría</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
+        <div class="card-header bg-dark text-white">
+            Últimos pedidos
+        </div>
 
-            <tbody>
+        <div class="p-3">
 
-                @forelse($productos as $p)
-                <tr>
+            @foreach(\App\Models\Pedido::latest()->take(3)->get() as $pedido)
 
-                    <td>
-                        <img src="{{ asset('img/Productos/' . $p->imagen) }}" 
-                             width="60" 
-                             style="border-radius:8px;">
-                    </td>
+                <div class="mb-3">
+                    <strong>#{{ $pedido->id }} - {{ $pedido->nombre }}</strong><br>
+                    <small class="text-muted">
+                        Total: L. {{ $pedido->total }}
+                    </small>
+                </div>
 
-                    <td>{{ $p->nombre }}</td>
+            @endforeach
 
-                    <td style="color:#16a34a; font-weight:bold;">
-                        L. {{ $p->precio }}
-                    </td>
+        </div>
 
-                    <td>{{ ucfirst($p->categoria) }}</td>
-
-                    <td>
-
-                        <!-- EDITAR -->
-                        <a href="/admin/edit/{{ $p->id }}" class="btn btn-warning btn-sm">
-                            Editar
-                        </a>
-
-                        <!-- ELIMINAR -->
-                        <a href="/admin/delete/{{ $p->id }}" 
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('¿Eliminar producto?')">
-                            Eliminar
-                        </a>
-
-                        <!-- OFERTA -->
-                        <form action="/admin/oferta/{{ $p->id }}" 
-                              method="POST" 
-                              style="display:inline;">
-                            @csrf
-                            <button class="btn btn-info btn-sm">
-                                {{ $p->oferta ? 'Quitar Oferta' : 'Poner Oferta' }}
-                            </button>
-                        </form>
-
-                    </td>
-
-                </tr>
-                @empty
-
-                <tr>
-                    <td colspan="5">No hay productos</td>
-                </tr>
-
-                @endforelse
-
-            </tbody>
-
-        </table>
     </div>
 
 </div>
+
+<!-- 📊 SCRIPT GRÁFICA -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('graficaPedidos');
+
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Pendientes', 'Procesados'],
+        datasets: [{
+            data: [{{ $pendientes }}, {{ $procesados }}],
+            backgroundColor: [
+                '#facc15',
+                '#22c55e'
+            ],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        },
+        cutout: '70%'
+    }
+});
+</script>
+
+<style>
+.hover-card:hover {
+    transform: translateY(-5px);
+    transition: 0.3s;
+}
+</style>
 
 @endsection
