@@ -14,10 +14,10 @@
             height: 100vh;
 
             background: linear-gradient(
-                rgba(0,0,0,0.6),
-                rgba(0,0,0,0.8)
+                rgba(0,0,0,0.3),
+                rgba(0,0,0,0.4)
             ),
-            url('/img/Fondo.jpg');
+                url('/img/Fondo.jpg');
 
             background-size: cover;
             background-position: center;
