@@ -15,7 +15,9 @@
                 <th>#</th>
                 <th>Cliente</th>
                 <th>Teléfono</th>
+                <th>Entrega</th>
                 <th>Dirección</th>
+                <th>Observación</th>
                 <th>Total</th>
                 <th>Fecha</th>
                 <th>Estado</th>
@@ -28,16 +30,45 @@
             @forelse($pedidos as $p)
             <tr>
                 <td>{{ $p->id }}</td>
-                <td>{{ $p->nombre }}</td>
-                <td>{{ $p->telefono }}</td>
-                <td>{{ $p->direccion }}</td>
 
+                <td>{{ $p->nombre }}</td>
+
+                <td>{{ $p->telefono }}</td>
+
+                <!-- 🔥 ENTREGA BONITA -->
+                <td>
+                    @if($p->tipo_entrega == 'domicilio')
+                        <span class="badge bg-primary">Domicilio</span>
+                    @else
+                        <span class="badge bg-secondary">Tienda</span>
+                    @endif
+                </td>
+
+                <!-- 🔥 DIRECCIÓN CONDICIONAL -->
+                <td>
+                    @if($p->tipo_entrega == 'domicilio')
+                        {{ $p->direccion }}
+                    @else
+                        <span class="text-muted">---</span>
+                    @endif
+                </td>
+
+                <!-- 🔥 OBSERVACIÓN -->
+                <td>
+                    {{ $p->observacion ?? '---' }}
+                </td>
+
+                <!-- 🔥 TOTAL -->
                 <td class="fw-bold text-success">
                     L. {{ $p->total }}
                 </td>
 
-                <td>{{ $p->created_at->format('d/m/Y H:i') }}</td>
+                <!-- 🔥 FECHA -->
+                <td>
+                    {{ $p->created_at->format('d/m/Y H:i') }}
+                </td>
 
+                <!-- 🔥 ESTADO -->
                 <td>
                     @if($p->estado == 'pendiente')
                         <span class="badge bg-warning text-dark">Pendiente</span>
@@ -46,6 +77,7 @@
                     @endif
                 </td>
 
+                <!-- 🔥 ACCIÓN -->
                 <td>
                     @if($p->estado == 'pendiente')
                         <form action="/admin/pedido/{{ $p->id }}/estado" method="POST">
@@ -63,7 +95,7 @@
             @empty
 
             <tr>
-                <td colspan="8">No hay pedidos</td>
+                <td colspan="10">No hay pedidos</td>
             </tr>
 
             @endforelse

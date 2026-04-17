@@ -12,22 +12,34 @@ class PedidoController extends Controller
     {
         $data = $request->all();
 
+        // 🔥 DEFINIR DIRECCIÓN SEGÚN TIPO
+        $direccionFinal = $data['tipo_entrega'] === 'domicilio'
+            ? $data['direccion']
+            : null;
+
+        // 🔥 TEXTO PARA CORREO
+        $direccionTexto = $data['tipo_entrega'] === 'domicilio'
+            ? $data['direccion']
+            : 'Recoger en tienda';
+
+        // 🔥 GUARDAR PEDIDO
         $pedido = Pedido::create([
             'nombre' => $data['nombre'],
-            'direccion' => $data['direccion'],
             'telefono' => $data['telefono'],
             'email' => $data['email'],
-            'detalle' => $data['detalle'],
-            'total' => $data['total'],
             'tipo_entrega' => $data['tipo_entrega'],
-            'estado' => 'pendiente'
+            'direccion' => $direccionFinal,
+            'observacion' => $data['observacion'] ?? null,
+            'detalle' => $data['detalle'],
+            'total' => $data['total']
         ]);
 
+        // 🔥 AGREGAR ID
         $data['pedido_id'] = $pedido->id;
 
         // 📧 CORREO ADMIN 
         Mail::raw(
-            "Nuevo pedido\n\nCliente: {$data['nombre']}\nTel: {$data['telefono']}\nDirección: {$data['direccion']}\n\nProductos:\n{$data['detalle']}\n\nTotal: L. {$data['total']}",
+            "Nuevo pedido\n\nCliente: {$data['nombre']}\nTel: {$data['telefono']}\nTipo: {$data['tipo_entrega']}\nDirección: {$direccionTexto}\n\nObservación: " . ($data['observacion'] ?? '---') . "\n\nProductos:\n{$data['detalle']}\n\nTotal: L. {$data['total']}",
             function ($message) {
                 $message->to('danyelantunez36@gmail.com')
                         ->subject('Nuevo Pedido');
@@ -37,10 +49,11 @@ class PedidoController extends Controller
         // 📧 CORREO CLIENTE
         Mail::send('emails.factura', $data, function ($message) use ($data) {
             $message->to($data['email'])
-                    ->subject('Factura de compra - Despensa Espinoza');
+                    ->subject('Comprobante de pedido - Despensa Espinoza');
         });
 
         session()->flash('nuevo_pedido', true);
+
         return response()->json([
             'success' => true
         ]);

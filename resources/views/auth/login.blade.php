@@ -108,7 +108,7 @@
 
     <div class="brand">Despensa Espinoza</div>
 
-    <h2 class="login-title">Login Admin</h2>
+    <h2 class="login-title">LOGIN</h2>
 
     @if(session('error'))
         <div class="alert alert-danger text-center">
