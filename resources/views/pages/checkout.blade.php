@@ -6,7 +6,7 @@
 
     <div class="checkout-card">
 
-        <h2 class="checkout-title">Finalizar Compra</h2>
+        <h2 class="checkout-title">Finalizar Pedido</h2>
 
         <form>
 
@@ -120,7 +120,7 @@ function confirmarPedido() {
             telefono,
             email,
             tipo_entrega,
-            direccion: tipo_entrega === 'domicilio' ? direccion : null,
+            direccion: tipo_entrega === 'domicilio' ? direccion : '', // ✅ FIX AQUÍ
             observacion,
             detalle,
             total

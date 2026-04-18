@@ -12,14 +12,17 @@ class PedidoController extends Controller
     {
         $data = $request->all();
 
+        // 🔥 ASEGURAR TIPO ENTREGA
+        $tipoEntrega = $data['tipo_entrega'] ?? 'tienda';
+
         // 🔥 DEFINIR DIRECCIÓN SEGÚN TIPO
-        $direccionFinal = $data['tipo_entrega'] === 'domicilio'
-            ? $data['direccion']
-            : null;
+        $direccionFinal = $tipoEntrega === 'domicilio'
+        ? ($data['direccion'] ?? '')
+        : 'Recoger en tienda';
 
         // 🔥 TEXTO PARA CORREO
-        $direccionTexto = $data['tipo_entrega'] === 'domicilio'
-            ? $data['direccion']
+        $direccionTexto = $tipoEntrega === 'domicilio'
+            ? ($data['direccion'] ?? '')
             : 'Recoger en tienda';
 
         // 🔥 GUARDAR PEDIDO
@@ -27,19 +30,30 @@ class PedidoController extends Controller
             'nombre' => $data['nombre'],
             'telefono' => $data['telefono'],
             'email' => $data['email'],
-            'tipo_entrega' => $data['tipo_entrega'],
+            'tipo_entrega' => $tipoEntrega,
             'direccion' => $direccionFinal,
             'observacion' => $data['observacion'] ?? null,
             'detalle' => $data['detalle'],
             'total' => $data['total']
         ]);
 
-        // 🔥 AGREGAR ID
-        $data['pedido_id'] = $pedido->id;
+        // 🔥 DATOS SEGUROS PARA CORREO
+        $data = [
+            'pedido_id' => $pedido->id,
+            'nombre' => $pedido->nombre,
+            'telefono' => $pedido->telefono,
+            'email' => $pedido->email,
+            'tipo_entrega' => $tipoEntrega,
+            'direccion' => $direccionFinal ?? '',
+            'direccionTexto' => $direccionTexto,
+            'observacion' => $pedido->observacion ?? '---',
+            'detalle' => $pedido->detalle,
+            'total' => $pedido->total
+        ];
 
         // 📧 CORREO ADMIN 
         Mail::raw(
-            "Nuevo pedido\n\nCliente: {$data['nombre']}\nTel: {$data['telefono']}\nTipo: {$data['tipo_entrega']}\nDirección: {$direccionTexto}\n\nObservación: " . ($data['observacion'] ?? '---') . "\n\nProductos:\n{$data['detalle']}\n\nTotal: L. {$data['total']}",
+            "Nuevo pedido\n\nCliente: {$data['nombre']}\nTel: {$data['telefono']}\nTipo: {$data['tipo_entrega']}\nDirección: {$data['direccionTexto']}\n\nObservación: {$data['observacion']}\n\nProductos:\n{$data['detalle']}\n\nTotal: L. {$data['total']}",
             function ($message) {
                 $message->to('danyelantunez36@gmail.com')
                         ->subject('Nuevo Pedido');

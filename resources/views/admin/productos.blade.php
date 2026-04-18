@@ -76,18 +76,31 @@
 
                     <td>
 
-                        <a href="/admin/edit/{{ $p->id }}" class="btn btn-warning btn-sm">Editar</a>
+                        <!-- EDITAR -->
+                        <a href="/admin/edit/{{ $p->id }}" class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
 
+                        <!-- ELIMINAR -->
                         <a href="/admin/delete/{{ $p->id }}" 
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('¿Eliminar producto?')">
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('¿Eliminar producto?')">
                             Eliminar
                         </a>
 
+                        <!-- OFERTA -->
                         <form action="/admin/oferta/{{ $p->id }}" method="POST" style="display:inline;">
                             @csrf
                             <button class="btn btn-info btn-sm">
                                 {{ $p->oferta ? 'Quitar Oferta' : 'Poner Oferta' }}
+                            </button>
+                        </form>
+
+                        <!-- 🔥 DESTACADO -->
+                        <form action="/admin/destacado/{{ $p->id }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button class="btn btn-primary btn-sm">
+                                {{ $p->destacado ? 'Quitar Destacado' : 'Destacar' }}
                             </button>
                         </form>
 

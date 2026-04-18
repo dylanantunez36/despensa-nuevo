@@ -1,3 +1,6 @@
+@php
+$config = \App\Models\Configuracion::pluck('valor', 'clave');
+@endphp
 @extends('layouts.app')
 
 @section('content')
@@ -8,7 +11,7 @@
     <p>Todo lo que necesitas, en un solo lugar</p>
 </header>
 
-<!-- CATEGORÍAS -->
+<!-- CATEGORÍAS (SE QUEDA IGUAL) -->
 <h2 class="section-title">Nuestras Categorías</h2>
 
 <div class="carousel-categories" id="carouselCategorias">
@@ -79,9 +82,10 @@
     </a>
 
 </div>
-<!-- PRODUCTOS DESTACADOS (ÚNICA SECCIÓN) -->
-<!-- PRODUCTOS DESTACADOS -->
-<section class="section container">
+
+@if(($config['destacados'] ?? 1) == 1)
+<!-- 🔥 DESTACADOS DINÁMICOS -->
+<section id="destacados" class="section container">
 
     <div class="section-green">
 
@@ -89,54 +93,68 @@
 
         <div class="grid-products">
 
-    <!-- FILA 1 -->
-    <div class="product-card">
-        <img src="{{ asset('img/Productos/cafeoro.jpg') }}">
-        <h5>Café Oro</h5>
-        <p>L. 75.00</p>
-        <button class="btn btn-success add-cart">Agregar</button>
-    </div>
+            @php
+                $destacados = \App\Models\Producto::where('destacado', true)->take(6)->get();
+            @endphp
 
-    <div class="product-card">
-        <img src="{{ asset('img/Productos/frijoles.webp') }}">
-        <h5>Frijoles Natura</h5>
-        <p>L. 25.00</p>
-        <button class="btn btn-success add-cart">Agregar</button>
-    </div>
+            @forelse($destacados as $p)
 
-    <div class="product-card">
-        <img src="{{ asset('img/Productos/Leche Entera.webp') }}">
-        <h5>Leche Entera</h5>
-        <p>L. 30.00</p>
-        <button class="btn btn-success add-cart">Agregar</button>
-    </div>
+                <div class="product-card">
+                    <img src="{{ asset('img/Productos/' . $p->imagen) }}">
+                    <h5>{{ $p->nombre }}</h5>
+                    <p>L. {{ $p->precio }}</p>
+                    <button class="btn btn-success add-cart">Agregar</button>
+                </div>
 
-    <!-- FILA 2 -->
-    <div class="product-card">
-        <img src="{{ asset('img/Productos/atun.webp') }}">
-        <h5>Atún Bumble Bee</h5>
-        <p>L. 55.00</p>
-        <button class="btn btn-success add-cart">Agregar</button>
-    </div>
+            @empty
 
-    <div class="product-card">
-        <img src="{{ asset('img/Productos/colgate.jpg') }}">
-        <h5>Pasta Colgate</h5>
-        <p>L. 45.00</p>
-        <button class="btn btn-success add-cart">Agregar</button>
-    </div>
+                <p class="text-center">No hay productos destacados</p>
 
-    <div class="product-card">
-        <img src="{{ asset('img/Productos/cremanivea.jpg') }}">
-        <h5>Crema Nivea</h5>
-        <p>L. 75.00</p>
-        <button class="btn btn-success add-cart">Agregar</button>
-    </div>
+            @endforelse
 
-</div>
+        </div>
 
     </div>
 
 </section>
+@endif
+
+@if(($config['ofertas'] ?? 1) == 1)
+<!-- 🔥 OFERTAS (YA LO TENÍAS, SOLO LO DEJO BIEN) -->
+<section id="ofertas" class="section container mt-5">
+
+    <div class="section-green">
+
+        <h2 class="text-center mb-4">Ofertas</h2>
+
+        <div class="grid-products">
+
+            @php
+                $ofertas = \App\Models\Producto::where('oferta', true)->take(3)->get();
+            @endphp
+
+            @forelse($ofertas as $p)
+
+                <div class="product-card">
+                    <img src="{{ asset('img/Productos/' . $p->imagen) }}">
+                    <h5>{{ $p->nombre }}</h5>
+                    <p style="color:red; font-weight:bold;">
+                        L. {{ $p->precio }}
+                    </p>
+                    <button class="btn btn-success add-cart">Agregar</button>
+                </div>
+
+            @empty
+
+                <p class="text-center">No hay ofertas disponibles</p>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+</section>
+@endif
 
 @endsection

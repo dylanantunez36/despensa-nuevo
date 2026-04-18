@@ -40,7 +40,11 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="/ofertas">Ofertas</a>
+                <a class="nav-link" href="#destacados">Destacados</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#ofertas">Ofertas</a>
             </li>
 
             <!-- 🔥 CARRITO -->

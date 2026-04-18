@@ -13,6 +13,7 @@ class Producto extends Model
         'precio',
         'imagen',
         'categoria',
-        'oferta'
+        'oferta',
+        'destacado'
     ];
 }

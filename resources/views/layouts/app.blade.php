@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <title>Despensa Espinoza</title>
 
-    <link rel="icon" href="{{ asset('img/logo.jpg') }}">
+    @php
+    $logo = \App\Models\Configuracion::where('clave','logo')->value('valor');
+    @endphp
+
+    <link rel="icon" href="{{ asset('storage/' . ($config['logo'] ?? 'img/logo.jpg')) }}">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +48,7 @@
         padding:10px;
         border-radius:10px;
     ">
-        Comprar
+        Finalizar pedido
     </button>
 
 </div>

@@ -10,10 +10,9 @@
     <!-- HEADER -->
     <div style="text-align:center; border-bottom:2px solid #16a34a; padding-bottom:15px;">
 
-    
-        <h2 style="color:#16a34a; margin:0;">Despensa Espinoza</h2>
-
         <img src="https://i.imgur.com/4SqCNhk.jpeg" style="width:80px; margin-bottom:10px;">
+
+        <h2 style="color:#16a34a; margin:0;">Despensa Espinoza</h2>
 
         <p style="margin:0;">Comprobante de pedido</p>
 
@@ -26,8 +25,18 @@
     <!-- CLIENTE -->
     <div style="margin-top:20px;">
         <p><strong>Cliente:</strong> {{ $nombre }}</p>
-        <p><strong>Dirección:</strong> {{ $direccion }}</p>
+
+        <p><strong>Tipo de entrega:</strong> 
+            {{ $tipo_entrega == 'domicilio' ? 'A domicilio' : 'Recoger en tienda' }}
+        </p>
+
+        @if(isset($tipo_entrega) && $tipo_entrega == 'domicilio')
+            <p><strong>Dirección:</strong> {{ $direccion }}</p>
+        @endif
+
         <p><strong>Teléfono:</strong> {{ $telefono }}</p>
+
+        <p><strong>Observación:</strong> {{ $observacion }}</p>
     </div>
 
     <!-- PRODUCTOS -->
@@ -43,8 +52,6 @@
     <div style="margin-top:20px; text-align:right;">
         <h3 style="color:#16a34a;">Total: L. {{ $total }}</h3>
     </div>
-
-    <p><strong>Tipo de entrega:</strong> {{ $tipo_entrega == 'domicilio' ? 'A domicilio' : 'Recoger en tienda' }}</p>
 
     <!-- FOOTER -->
     <p style="color:#555; font-size:14px;">

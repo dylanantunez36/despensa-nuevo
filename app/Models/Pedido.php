@@ -14,6 +14,7 @@ class Pedido extends Model
         'detalle',
         'total',
         'estado',
+        'observacion',
         'tipo_entrega'
     ];
 }

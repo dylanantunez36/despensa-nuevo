@@ -22,7 +22,10 @@ Route::get('/login', function () {
 
 Route::post('/login', function (Request $request) {
 
-    if ($request->usuario === 'admin' && $request->password === '1234') {
+    // 🔥 obtener contraseña desde la BD
+    $pass = \App\Models\Configuracion::where('clave','admin_password')->value('valor') ?? '1234';
+
+    if ($request->usuario === 'admin' && $request->password === $pass) {
 
         session([
             'admin' => true,
@@ -98,9 +101,24 @@ Route::prefix('admin')->group(function () {
         return app(ProductoController::class)->destroy($id);
     });
 
-    /* =========================
-       TOGGLE OFERTA
-    ========================= */
+    
+
+    /* 🔥 DESTACADO */
+    Route::post('/destacado/{id}', function ($id) use ($checkAdmin) {
+
+        if ($res = $checkAdmin()) return $res;
+
+        $producto = \App\Models\Producto::find($id);
+
+        if ($producto) {
+            $producto->destacado = !$producto->destacado;
+            $producto->save();
+        }
+
+        return back();
+    });
+
+    /* 🔥 OFERTA */
     Route::post('/oferta/{id}', function ($id) use ($checkAdmin) {
 
         if ($res = $checkAdmin()) return $res;
@@ -115,9 +133,7 @@ Route::prefix('admin')->group(function () {
         return back();
     });
 
-    /* =========================
-       PEDIDOS
-    ========================= */
+    /* 🔥 PEDIDOS */
     Route::get('/pedidos', function () use ($checkAdmin) {
 
         if ($res = $checkAdmin()) return $res;
@@ -127,9 +143,7 @@ Route::prefix('admin')->group(function () {
         return view('admin.pedidos', compact('pedidos'));
     });
 
-    /* =========================
-       CAMBIAR ESTADO
-    ========================= */
+    /* 🔥 CAMBIAR ESTADO */
     Route::post('/pedido/{id}/estado', function ($id) use ($checkAdmin) {
 
         if ($res = $checkAdmin()) return $res;
@@ -179,17 +193,20 @@ Route::get('/ofertas', function () {
     return view('pages.ofertas', compact('productos'));
 });
 
+/* =========================
+   CHECK PEDIDOS (NOTIFICACIÓN)
+========================= */
 Route::get('/admin/check-pedidos', function () {
 
     if (!session()->has('admin')) return response()->json([]);
 
-    $ultimo = \App\Models\Pedido::max('id');
+    return \App\Models\Pedido::latest()->take(1)->get();
 
-    return response()->json([
-        'ultimo' => $ultimo
-    ]);
 });
 
+/* =========================
+   PRODUCTOS ADMIN
+========================= */
 Route::get('/admin/productos', function () {
 
     if (!session()->has('admin')) return redirect('/login');
@@ -199,10 +216,7 @@ Route::get('/admin/productos', function () {
     return view('admin.productos', compact('productos'));
 });
 
-Route::get('/admin/check-pedidos', function () {
+use App\Http\Controllers\ConfiguracionController;
 
-    if (!session()->has('admin')) return response()->json([]);
-
-    return \App\Models\Pedido::latest()->take(1)->get();
-
-});
+Route::get('/admin/configuracion', [ConfiguracionController::class, 'index']);
+Route::post('/admin/configuracion', [ConfiguracionController::class, 'guardar']);

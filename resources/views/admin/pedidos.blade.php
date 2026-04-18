@@ -54,7 +54,7 @@
                 </td>
 
                 <!-- 🔥 OBSERVACIÓN -->
-                <td>
+                <td style="max-width:200px;">
                     {{ $p->observacion ?? '---' }}
                 </td>
 
