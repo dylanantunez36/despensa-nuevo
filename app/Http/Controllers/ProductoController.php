@@ -33,7 +33,11 @@ class ProductoController extends Controller
             'nombre' => $request->nombre,
             'precio' => $request->precio,
             'categoria' => $request->categoria,
-            'imagen' => $nombreImagen
+            'imagen' => $nombreImagen,
+
+            // 🔥 OFERTA
+            'oferta' => $request->oferta ? 1 : 0,
+            'precio_oferta' => $request->oferta ? $request->precio_oferta : null
         ]);
 
         return redirect('/admin');
@@ -49,6 +53,7 @@ class ProductoController extends Controller
     {
         $producto = Producto::find($id);
 
+        // 🔥 IMAGEN (SI CAMBIA)
         if ($request->hasFile('imagen')) {
             $archivo = $request->file('imagen');
             $nombreImagen = time() . "." . $archivo->getClientOriginalExtension();
@@ -56,9 +61,15 @@ class ProductoController extends Controller
             $producto->imagen = $nombreImagen;
         }
 
+        // 🔥 DATOS
         $producto->nombre = $request->nombre;
         $producto->precio = $request->precio;
         $producto->categoria = $request->categoria;
+
+        // 🔥 OFERTA (AQUÍ ESTABA EL ERROR)
+        $producto->oferta = $request->oferta ? 1 : 0;
+        $producto->precio_oferta = $request->oferta ? $request->precio_oferta : null;
+
         $producto->save();
 
         return redirect('/admin');

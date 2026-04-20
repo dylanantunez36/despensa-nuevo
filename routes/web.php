@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\CategoriaController;
 
 /* =========================
    HOME
@@ -22,7 +24,6 @@ Route::get('/login', function () {
 
 Route::post('/login', function (Request $request) {
 
-    // 🔥 obtener contraseña desde la BD
     $pass = \App\Models\Configuracion::where('clave','admin_password')->value('valor') ?? '1234';
 
     if ($request->usuario === 'admin' && $request->password === $pass) {
@@ -101,8 +102,6 @@ Route::prefix('admin')->group(function () {
         return app(ProductoController::class)->destroy($id);
     });
 
-    
-
     /* 🔥 DESTACADO */
     Route::post('/destacado/{id}', function ($id) use ($checkAdmin) {
 
@@ -166,6 +165,26 @@ Route::prefix('admin')->group(function () {
         return back();
     });
 
+    /* 🔐 SEGURIDAD */
+    Route::get('/seguridad', function () use ($checkAdmin) {
+
+        if ($res = $checkAdmin()) return $res;
+
+        return view('admin.seguridad');
+    });
+
+    Route::post('/seguridad', function (Request $request) use ($checkAdmin) {
+
+        if ($res = $checkAdmin()) return $res;
+
+        \App\Models\Configuracion::updateOrCreate(
+            ['clave' => 'admin_password'],
+            ['valor' => $request->password]
+        );
+
+        return back()->with('success', 'Contraseña actualizada');
+    });
+
 });
 
 /* =========================
@@ -194,7 +213,7 @@ Route::get('/ofertas', function () {
 });
 
 /* =========================
-   CHECK PEDIDOS (NOTIFICACIÓN)
+   CHECK PEDIDOS
 ========================= */
 Route::get('/admin/check-pedidos', function () {
 
@@ -216,7 +235,16 @@ Route::get('/admin/productos', function () {
     return view('admin.productos', compact('productos'));
 });
 
-use App\Http\Controllers\ConfiguracionController;
-
+/* =========================
+   CONFIGURACIÓN
+========================= */
 Route::get('/admin/configuracion', [ConfiguracionController::class, 'index']);
 Route::post('/admin/configuracion', [ConfiguracionController::class, 'guardar']);
+
+/* =========================
+   CATEGORÍAS ADMIN
+========================= */
+Route::get('/admin/categorias', [CategoriaController::class, 'index']);
+Route::post('/admin/categorias/store', [CategoriaController::class, 'store']);
+Route::get('/admin/categorias/toggle/{id}', [CategoriaController::class, 'toggle']);
+Route::get('/admin/categorias/delete/{id}', [CategoriaController::class, 'destroy']);

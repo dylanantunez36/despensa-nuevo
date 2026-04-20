@@ -1,8 +1,13 @@
 <nav class="navbar navbar-expand-lg custom-navbar px-4">
 
+    <!-- 🔥 CONFIG -->
+    @php
+        $config = \App\Models\Configuracion::pluck('valor', 'clave');
+    @endphp
+
     <!-- LOGO -->
     <a class="navbar-brand" href="/">
-        <img src="{{ asset('img/logo.jpg') }}" width="50">
+        <img src="{{ isset($config['logo']) ? asset($config['logo']) : asset('img/logo.jpg') }}" width="50">
     </a>
 
     <div class="collapse navbar-collapse">

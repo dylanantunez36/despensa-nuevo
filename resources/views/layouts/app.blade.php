@@ -8,7 +8,7 @@
     $logo = \App\Models\Configuracion::where('clave','logo')->value('valor');
     @endphp
 
-    <link rel="icon" href="{{ asset('storage/' . ($config['logo'] ?? 'img/logo.jpg')) }}">
+    <link rel="icon" href="{{ asset($logo ?? 'img/logo.jpg') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -24,41 +24,63 @@
     @yield('content')
 </main>
 
-<!-- PANEL CARRITO -->
-<div id="cart-panel">
+<!-- 🛒 CARRITO MEJORADO -->
+<div id="cart-panel" style="
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 350px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+">
 
-    <div class="cart-header">
-        <h3>Tu carrito</h3>
-        <span id="cart-close" class="cart-close">✖</span>
-    </div>
-
-    <div id="cart-items"></div>
-
-    <div class="cart-total">
-        Total: <span id="cart-total">L. 0</span>
-    </div>
-
-    <button id="clear-cart">Vaciar carrito</button>
-
-    <button id="checkout-btn" style="
-        margin-top:10px;
+    <!-- HEADER -->
+    <div style="
         background:#16a34a;
         color:white;
-        border:none;
-        padding:10px;
-        border-radius:10px;
+        padding:15px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        font-weight:bold;
     ">
-        Finalizar pedido
-    </button>
+        🛒 Tu carrito
+        <span id="cart-close" style="cursor:pointer; font-size:20px;">✖</span>
+    </div>
+
+    <!-- ITEMS -->
+    <div id="cart-items" style="
+        flex:1;
+        overflow-y:auto;
+        padding:15px;
+    "></div>
+
+    <!-- FOOTER -->
+    <div style="
+        border-top:1px solid #eee;
+        padding:15px;
+    ">
+        <h5>Total:</h5>
+        <h4 id="cart-total" style="color:#16a34a;">L. 0</h4>
+
+        <button id="clear-cart" class="btn btn-outline-danger w-100 mb-2">
+            Vaciar carrito
+        </button>
+
+        <button id="checkout-btn" class="btn btn-success w-100">
+            Finalizar pedido
+        </button>
+    </div>
 
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
-    /* ========================
-       CARRITO (NO TOCAR)
-    ======================== */
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -71,11 +93,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const clearCart = document.getElementById('clear-cart');
 
     if(cartToggle){
-        cartToggle.onclick = () => cartPanel.classList.add('active');
+        cartToggle.onclick = () => cartPanel.style.right = "0";
     }
 
     if(cartClose){
-        cartClose.onclick = () => cartPanel.classList.remove('active');
+        cartClose.onclick = () => cartPanel.style.right = "-400px";
     }
 
     function saveCart() {
@@ -123,22 +145,36 @@ document.addEventListener('DOMContentLoaded', function () {
             total += subtotal;
 
             cartItems.innerHTML += `
-                <div class="cart-item">
+                <div style="
+                    background:#f9f9f9;
+                    padding:10px;
+                    border-radius:10px;
+                    margin-bottom:10px;
+                ">
 
-                    <div class="cart-row">
+                    <div style="display:flex; justify-content:space-between;">
                         <strong>${item.name}</strong>
-                        <button onclick="removeItem(${index})">❌</button>
+                        <button onclick="removeItem(${index})" style="
+                            background:red;
+                            color:white;
+                            border:none;
+                            border-radius:5px;
+                            padding:3px 6px;
+                        ">✖</button>
                     </div>
 
-                    <div class="cart-row">
-                        <span>L. ${item.price}</span>
-                        <span>Subtotal: L. ${subtotal}</span>
+                    <div style="font-size:14px; color:#555;">
+                        L. ${item.price} x ${item.qty}
                     </div>
 
-                    <div class="cart-controls">
-                        <button onclick="changeQty(${index}, -1)">-</button>
+                    <div style="font-weight:bold;">
+                        Subtotal: L. ${subtotal}
+                    </div>
+
+                    <div style="display:flex; gap:5px; margin-top:5px;">
+                        <button onclick="changeQty(${index}, -1)" class="btn btn-sm btn-outline-secondary">-</button>
                         <span>${item.qty}</span>
-                        <button onclick="changeQty(${index}, 1)">+</button>
+                        <button onclick="changeQty(${index}, 1)" class="btn btn-sm btn-outline-secondary">+</button>
                     </div>
 
                 </div>
@@ -172,41 +208,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.add-cart').forEach(btn => {
         btn.addEventListener('click', function() {
-            let card = this.closest('.product-card');
-            let name = card.querySelector('h5').innerText;
-            let price = parseFloat(card.querySelector('p').innerText.replace('L.', ''));
+
+            let name = this.dataset.name || this.closest('.product-card').querySelector('h5').innerText;
+
+            let price = this.dataset.price 
+                ? parseFloat(this.dataset.price)
+                : parseFloat(this.closest('.product-card').querySelector('p').innerText.replace('L.', ''));
+
+            // 🔥 Seguridad extra
+            if (isNaN(price)) {
+                let card = this.closest('.product-card');
+                price = parseFloat(card.querySelector('p').innerText.replace('L.', ''));
+            }
 
             addToCart(name, price);
         });
     });
 
     renderCart();
-
-    /* ========================
-       CARRUSEL (FIX REAL FINAL)
-    ======================== */
-
-    const container = document.getElementById("carouselCategorias");
-
-    if (!container) return;
-
-    let speed = 0.5;
-
-    function autoScroll() {
-        container.scrollLeft += speed;
-
-        if (container.scrollLeft >= (container.scrollWidth - container.clientWidth)) {
-            container.scrollLeft = 0;
-        }
-
-        requestAnimationFrame(autoScroll);
-    }
-
-    window.scrollCategorias = function(direction) {
-        container.scrollLeft += direction * 200;
-    };
-
-    autoScroll();
 
 });
 </script>

@@ -9,12 +9,12 @@
         <h2 class="fw-bold">Agregar Producto</h2>
     </div>
 
-    <!-- BOTÓN VOLVER (IZQUIERDA BONITO) -->
+    <!-- BOTÓN VOLVER -->
     <a href="/admin/productos" class="btn btn-secondary mb-4">
         ← Volver
     </a>
 
-    <!-- FORM CARD MEJORADA -->
+    <!-- FORM -->
     <div class="card shadow border-0 p-4" style="border-radius:15px;">
 
         <form action="/admin/store" method="POST" enctype="multipart/form-data">
@@ -31,7 +31,21 @@
                 <!-- PRECIO -->
                 <div class="col-md-6">
                     <label class="mb-1 fw-semibold">Precio</label>
-                    <input type="number" step="0.01" name="precio" class="form-control" required>
+                    <input type="number" step="0.01" name="precio" id="precioNormal" class="form-control" required>
+
+                    <!-- OFERTA -->
+                    <div class="form-group mt-2">
+                        <label>
+                            <input type="checkbox" name="oferta" value="1" id="chkOferta">
+                            Producto en oferta
+                        </label>
+                    </div>
+
+                    <!-- PRECIO OFERTA -->
+                    <div class="form-group mt-2" id="campoOferta" style="display:none;">
+                        <label>Precio en oferta</label>
+                        <input type="number" step="0.01" name="precio_oferta" id="precioOferta" class="form-control">
+                    </div>
                 </div>
 
                 <!-- CATEGORIA -->
@@ -76,5 +90,25 @@
     </div>
 
 </div>
+
+<!-- 🔥 JS -->
+<script>
+document.getElementById('chkOferta').addEventListener('change', function() {
+    document.getElementById('campoOferta').style.display =
+        this.checked ? 'block' : 'none';
+});
+
+// 🔥 VALIDACIÓN
+document.querySelector('form').addEventListener('submit', function(e){
+    let precio = parseFloat(document.getElementById('precioNormal').value);
+    let oferta = document.getElementById('chkOferta').checked;
+    let precioOferta = parseFloat(document.getElementById('precioOferta').value);
+
+    if(oferta && precioOferta >= precio){
+        e.preventDefault();
+        alert('El precio de oferta debe ser menor al precio normal');
+    }
+});
+</script>
 
 @endsection

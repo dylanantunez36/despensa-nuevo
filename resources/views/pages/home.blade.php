@@ -6,15 +6,26 @@ $config = \App\Models\Configuracion::pluck('valor', 'clave');
 @section('content')
 
 <!-- HERO -->
-<header class="hero">
+<header class="hero"
+    style="
+        background-image: url('{{ url($config['hero'] ?? 'img/Fondo.jpg') }}?v={{ time() }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 150px 20px 140px;
+        text-align: center;
+        color: white;
+    "
+>
     <h1>Despensa Espinoza</h1>
-    <p>Todo lo que necesitas, en un solo lugar</p>
+    <p>En el corazon del pueblo Trojeño</p>
 </header>
 
-<!-- CATEGORÍAS (SE QUEDA IGUAL) -->
 <h2 class="section-title">Nuestras Categorías</h2>
 
 <div class="carousel-categories" id="carouselCategorias">
+
+    <!-- 🔥 CATEGORÍAS FIJAS (LAS QUE YA TENÍAS) -->
 
     <a href="/categoria/abarrotes" class="cat-card">
         <img src="{{ asset('img/Apartados/Abarroteria.png') }}">
@@ -81,6 +92,18 @@ $config = \App\Models\Configuracion::pluck('valor', 'clave');
         <span>Frutas y Verduras</span>
     </a>
 
+    <!-- 🔥 CATEGORÍAS DINÁMICAS -->
+    @php
+    $categorias = \App\Models\Categoria::where('activo', 1)->get();
+    @endphp
+
+    @foreach($categorias as $c)
+        <a href="/categoria/{{ $c->slug }}" class="cat-card">
+            <img src="{{ asset('img/categorias/' . $c->imagen) }}">
+            <span>{{ $c->nombre }}</span>
+        </a>
+    @endforeach
+
 </div>
 
 @if(($config['destacados'] ?? 1) == 1)
@@ -103,7 +126,13 @@ $config = \App\Models\Configuracion::pluck('valor', 'clave');
                     <img src="{{ asset('img/Productos/' . $p->imagen) }}">
                     <h5>{{ $p->nombre }}</h5>
                     <p>L. {{ $p->precio }}</p>
-                    <button class="btn btn-success add-cart">Agregar</button>
+                    <button 
+                        class="btn btn-success add-cart"
+                        data-name="{{ $p->nombre }}"
+                        data-price="{{ $p->precio_oferta && $p->precio_oferta < $p->precio ? $p->precio_oferta : $p->precio }}"
+                    >
+                        Agregar
+                    </button>
                 </div>
 
             @empty
@@ -135,13 +164,59 @@ $config = \App\Models\Configuracion::pluck('valor', 'clave');
 
             @forelse($ofertas as $p)
 
-                <div class="product-card">
+                <div class="product-card" style="position:relative;">
+
+                    <!-- 🔥 BADGE OFERTA -->
+                    <span style="
+                        position:absolute;
+                        top:10px;
+                        left:10px;
+                        background:red;
+                        color:white;
+                        padding:5px 10px;
+                        border-radius:5px;
+                        font-size:12px;
+                        font-weight:bold;
+                    ">
+                        OFERTA
+                    </span>
+
+                    <!-- IMAGEN -->
                     <img src="{{ asset('img/Productos/' . $p->imagen) }}">
+
+                    <!-- NOMBRE -->
                     <h5>{{ $p->nombre }}</h5>
-                    <p style="color:red; font-weight:bold;">
-                        L. {{ $p->precio }}
-                    </p>
-                    <button class="btn btn-success add-cart">Agregar</button>
+
+                    @if($p->precio_oferta && $p->precio_oferta < $p->precio)
+
+                        <!-- PRECIO VIEJO -->
+                        <p style="text-decoration: line-through; color: gray; margin:0;">
+                            L. {{ $p->precio }}
+                        </p>
+
+                        <!-- PRECIO NUEVO -->
+                        <p style="color:red; font-weight:bold; font-size:18px;">
+                            L. {{ $p->precio_oferta }}
+                        </p>
+
+                    @else
+
+                        <!-- PRECIO NORMAL -->
+                        <p>
+                            L. {{ $p->precio }}
+                        </p>
+
+                    @endif
+
+                    <!-- BOTÓN -->
+                    <button 
+                        class="btn btn-success add-cart"
+                        data-name="{{ $p->nombre }}"
+                        data-price="{{ $p->precio_oferta && $p->precio_oferta < $p->precio ? $p->precio_oferta : $p->precio }}"
+                    >
+                        Agregar
+                    </button>
+
                 </div>
 
             @empty

@@ -78,6 +78,7 @@
     <a href="/admin">📊 Dashboard</a>
     <a href="/admin/productos">📦 Productos</a>
     <a href="/admin/pedidos">🧾 Pedidos</a>
+    <a class="nav-link" href="/admin/categorias">🗂️ Categorías</a>
     <a href="/admin/seguridad">🔐 Seguridad</a>
     <a href="/admin/configuracion">⚙️ Configuración</a>
     <hr>

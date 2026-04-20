@@ -25,6 +25,12 @@
             <input type="file" name="logo" class="form-control">
         </div>
 
+        <!-- IMAGEN HERO -->
+        <div class="mb-3">
+            <label>Imagen del encabezado</label>
+            <input type="file" name="hero" class="form-control">
+        </div>
+
         <!-- ACTIVAR DESTACADOS -->
         <div class="mb-3">
             <label>Mostrar productos destacados</label>
