@@ -1,10 +1,21 @@
+@php
+$config = \App\Models\Configuracion::pluck('valor', 'clave');
+@endphp
+
 @extends('layouts.app')
 
 @section('content')
 
-<header class="hero">
-    <h1>{{ strtoupper($nombre) }}</h1>
-</header>
+<header class="hero"
+style="background:
+linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)),
+url('{{ asset($config['hero'] ?? 'img/Fondo.jpg') }}') !important;
+background-size: cover;
+background-position: center;">
+
+<h2 class="section-title text-center mt-4 text-white">
+    {{ $nombre }}
+</h2>
 
 <div class="container mt-5">
 

@@ -61,7 +61,8 @@ Route::prefix('admin')->group(function () {
 
         if ($res = $checkAdmin()) return $res;
 
-        $productos = \App\Models\Producto::all();
+        // 🔥 FIX: mostrar últimos productos correctamente
+        $productos = \App\Models\Producto::orderBy('id', 'desc')->take(5)->get();
 
         $pendientes = \App\Models\Pedido::where('estado', 'pendiente')->count();
         $procesados = \App\Models\Pedido::where('estado', 'procesado')->count();
@@ -230,7 +231,7 @@ Route::get('/admin/productos', function () {
 
     if (!session()->has('admin')) return redirect('/login');
 
-    $productos = \App\Models\Producto::all();
+    $productos = \App\Models\Producto::orderBy('id', 'desc')->take(5)->get();
 
     return view('admin.productos', compact('productos'));
 });
@@ -248,3 +249,15 @@ Route::get('/admin/categorias', [CategoriaController::class, 'index']);
 Route::post('/admin/categorias/store', [CategoriaController::class, 'store']);
 Route::get('/admin/categorias/toggle/{id}', [CategoriaController::class, 'toggle']);
 Route::get('/admin/categorias/delete/{id}', [CategoriaController::class, 'destroy']);
+
+/* =========================
+   BUSCAR
+========================= */
+Route::get('/buscar', function (Request $request) {
+
+    $q = $request->q;
+
+    $productos = \App\Models\Producto::where('nombre', 'LIKE', "%$q%")->get();
+
+    return view('pages.buscar', compact('productos', 'q'));
+});

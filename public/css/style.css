@@ -481,3 +481,181 @@ body {
     border-radius: 8px;
 }
 
+/* =========================
+   RESPONSIVE GENERAL
+========================= */
+
+/* 🔥 GRID PRODUCTOS */
+/* 🔥 GRID CONTROLADO (PRO) */
+.grid-products {
+    display: grid;
+    gap: 20px;
+}
+
+/* 💻 PC GRANDE */
+@media (min-width: 1200px) {
+    .grid-products {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* 💻 LAPTOP */
+@media (max-width: 1199px) {
+    .grid-products {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 📱 TABLET Y CELULAR */
+@media (max-width: 768px) {
+    .grid-products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.product-card {
+    max-width: 220px;
+    margin: auto;
+    padding: 10px;
+}
+
+/* 🔥 CARDS */
+.product-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-card h5 {
+    font-size: 0.95rem;
+}
+
+.product-card p {
+    font-size: 0.9rem;
+}
+
+/* 🔥 IMÁGENES */
+.product-card img {
+    width: 100%;
+    height: 150px; 
+    object-fit: contain; 
+    background: #fff;
+    padding: 10px;
+}
+
+.product-card button {
+    margin-top: auto;
+}
+
+/* =========================
+   NAVBAR RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-link {
+        padding: 10px 0;
+    }
+
+}
+
+/* =========================
+   HERO RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .hero {
+        padding: 80px 15px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+}
+
+/* =========================
+   CARRITO RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .cart-sidebar {
+        width: 100% !important;
+        right: 0;
+    }
+
+}
+
+/* =========================
+   CHECKOUT RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .checkout-card {
+        padding: 15px;
+    }
+
+    .checkout-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+}
+
+/* =========================
+   TABLAS ADMIN
+========================= */
+
+@media (max-width: 768px) {
+
+    table {
+        font-size: 12px;
+    }
+
+    .table td, .table th {
+        padding: 8px;
+    }
+
+}
+
+.section-green {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 15px 25px;
+    border-radius: 20px;
+}
+
+/* 🔥 CENTRAR PRODUCTOS CUANDO HAY POCOS */
+.grid-products {
+    justify-content: center;
+}
+
+/* 🔥 HACE QUE LAS CARDS NO SE ESTIREN */
+.product-card {
+    width: 100%;
+    max-width: 220px;
+}
+
+.grid-products {
+    justify-items: center;
+}
+
+.section-title {
+    color: #fff;
+}
+
+.section-title {
+    color: #000;
+}

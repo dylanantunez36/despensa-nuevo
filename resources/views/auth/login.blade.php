@@ -6,6 +6,12 @@
     <link rel="icon" href="{{ asset('img/logo.jpg') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    @php
+    $config = \App\Models\Configuracion::pluck('valor', 'clave');
+    @endphp
+
+    <link rel="icon" href="{{ asset($config['logo'] ?? 'img/logo.jpg') }}">
+
     <style>
         /* FONDO */
         body {

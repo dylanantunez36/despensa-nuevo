@@ -12,4 +12,6 @@ class Categoria extends Model
         'imagen',
         'activo'
     ];
+
+    public $timestamps = false;
 }

@@ -18,10 +18,18 @@ $config = \App\Models\Configuracion::pluck('valor', 'clave');
     "
 >
     <h1>Despensa Espinoza</h1>
-    <p>En el corazon del pueblo Trojeño</p>
+    <p>En el corazón del pueblo Trojeño</p>
 </header>
 
-<h2 class="section-title">Nuestras Categorías</h2>
+<h2 class="section-title text-dark">Buscador</h2>
+
+<div class="container mt-4">
+    <form action="/buscar" method="GET">
+        <input type="text" name="q" class="form-control" placeholder="Buscar productos..." required>
+    </form>
+</div>
+
+<h2 class="section-title text-dark">Nuestras Categorías</h2>
 
 <div class="carousel-categories" id="carouselCategorias">
 

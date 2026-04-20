@@ -10,6 +10,10 @@
         <img src="{{ isset($config['logo']) ? asset($config['logo']) : asset('img/logo.jpg') }}" width="50">
     </a>
 
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
     <div class="collapse navbar-collapse">
 
         <!-- 🔐 ADMIN -->

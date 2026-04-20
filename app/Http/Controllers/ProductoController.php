@@ -40,7 +40,7 @@ class ProductoController extends Controller
             'precio_oferta' => $request->oferta ? $request->precio_oferta : null
         ]);
 
-        return redirect('/admin');
+        return redirect('/admin/productos')->with('success', 'Producto agregado correctamente');
     }
 
     public function edit($id)
